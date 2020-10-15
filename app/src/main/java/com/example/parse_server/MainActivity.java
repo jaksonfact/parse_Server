@@ -116,11 +116,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             setContentView(R.layout.activity_main);
 
 
+            setTitle("Instagram");
+            loginTextView = findViewById(R.id.loginTextView);
+            loginTextView.setOnClickListener(this);
             usernameEditText = findViewById(R.id.usernameEditText);
             passwordEditText = findViewById(R.id.passwordEditText);
 
-            loginTextView = findViewById(R.id.loginTextView);
-            loginTextView.setOnClickListener(this);
             ImageView logoImageView = findViewById(R.id.logoImageView);
             ConstraintLayout backgroundLayout = findViewById(R.id.backgroundLayout);
             logoImageView.setOnClickListener(this);

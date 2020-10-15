@@ -15,6 +15,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class List_Layout extends AppCompatActivity {
+
 
 
 
@@ -63,6 +66,7 @@ public class List_Layout extends AppCompatActivity {
                 object.saveInBackground(new SaveCallback() {
                     @Override
                     public void done(ParseException e) {
+
                         if (e == null){
                             Toast.makeText(List_Layout.this, "Image has been shared ! ", Toast.LENGTH_SHORT).show();
 
@@ -100,12 +104,17 @@ public class List_Layout extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.share){
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+            if (checkSelfPermission(android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
                 requestPermissions(new String[] {android.Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
             }else {
                 getPhoto();
             }
 
+        }else if (item.getItemId() == R.id.logout){
+            ParseUser.logOut();
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);
@@ -116,9 +125,20 @@ public class List_Layout extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list__layout);
 
+        setTitle("User Feed");
+
         final ListView listView = findViewById(R.id.listView);
         final ArrayList<String> usernames = new ArrayList<String>();
         final ArrayAdapter arrayAdapter = new ArrayAdapter(this, android.R.layout.simple_list_item_1, usernames);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent intent = new Intent(getApplicationContext(), UserFeedActivity.class);
+                intent.putExtra("username", usernames.get(position));
+                startActivity(intent);
+            }
+        });
 
         ParseQuery<ParseUser> query = ParseUser.getQuery();
 
